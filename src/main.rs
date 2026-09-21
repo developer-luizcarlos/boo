@@ -1,6 +1,6 @@
-use std::io::BufRead;
-
 use clap::{Arg, ColorChoice, Command, builder::styling};
+use colored::Colorize;
+use std::io::BufRead;
 
 fn main() {
     const STYLES: styling::Styles = styling::Styles::styled()
@@ -25,7 +25,7 @@ fn main() {
     let line_ = args.get_one::<String>("Line Text");
 
     if let Some(line) = line_ {
-        println!("{}", line);
+        println!("{}", line.bright_green().bold());
         std::process::exit(0);
     } else {
         let stdin = std::io::stdin();
@@ -33,7 +33,7 @@ fn main() {
 
         for line_ in reader.lines() {
             if let Ok(line) = line_ {
-                println!("{}", line);
+                println!("{}", line.bright_green().bold());
             }
             std::process::exit(0);
         }
