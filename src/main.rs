@@ -1,25 +1,11 @@
 use clap::{Arg, Command};
-use std::io::BufRead;
+use std::{fmt, io::BufRead, process};
 
 fn main() {
     let args = config_args();
+    let line = args.get_one::<String>("Text Line");
 
-    let line_ = args.get_one::<String>("Line Text");
-
-    if let Some(line) = line_ {
-        println!("{}", line);
-        std::process::exit(0);
-    } else {
-        let stdin = std::io::stdin();
-        let reader = stdin.lock();
-
-        for line_ in reader.lines() {
-            if let Ok(line) = line_ {
-                println!("{}", line);
-            }
-            std::process::exit(0);
-        }
-    }
+    display_line(line);
 }
 
 /// Define arguments configuration, returning the matches
@@ -35,4 +21,25 @@ fn config_args() -> clap::ArgMatches {
                 .required(false),
         )
         .get_matches()
+}
+
+/// Display the text line given as argument or from stdin
+fn display_line<T>(line: Option<T>)
+where
+    T: fmt::Display,
+{
+    if let Some(line_) = line {
+        println!("{}", line_);
+        process::exit(0);
+    }
+
+    let stdin = std::io::stdin();
+    let reader = stdin.lock();
+
+    for line_ in reader.lines() {
+        if let Ok(line) = line_ {
+            println!("{}", line);
+        }
+        process::exit(0);
+    }
 }
