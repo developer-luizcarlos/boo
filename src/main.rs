@@ -2,17 +2,7 @@ use clap::{Arg, Command};
 use std::io::BufRead;
 
 fn main() {
-    let args = Command::new("Boo")
-        .about("Display a line of text")
-        .author("Luiz Carlos Lima")
-        .version("0.1")
-        .arg(
-            Arg::new("Line Text")
-                .help("A text line to display")
-                .exclusive(true)
-                .required(false),
-        )
-        .get_matches();
+    let args = config_args();
 
     let line_ = args.get_one::<String>("Line Text");
 
@@ -30,4 +20,19 @@ fn main() {
             std::process::exit(0);
         }
     }
+}
+
+/// Define arguments configuration, returning the matches
+fn config_args() -> clap::ArgMatches {
+    Command::new("Boo")
+        .about("Display a line of text")
+        .author("Luiz Carlos Lima")
+        .version("0.0.1")
+        .arg(
+            Arg::new("Text Line")
+                .help("Text line to display")
+                .exclusive(true)
+                .required(false),
+        )
+        .get_matches()
 }
